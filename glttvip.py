@@ -103,70 +103,6 @@ from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 
-# Kiểm tra và cài đặt thư viện cần thiết
-try:
-    from faker import Faker
-    from requests import session
-    from colorama import Fore, Style
-    import pystyle
-except ImportError:
-    os.system("pip install faker requests colorama bs4 pystyle")
-    os.system("pip3 install requests pysocks")
-    print('__Vui Lòng Chạy Lại Tool__')
-    sys.exit()
-
-# Tạo hoặc đọc khóa mã hóa bằng base64
-secret_key = base64.urlsafe_b64encode(os.urandom(32))
-
-# Mã hóa và giải mã dữ liệu bằng base64
-def encrypt_data(data):
-    return base64.b64encode(data.encode()).decode()
-
-def decrypt_data(encrypted_data):
-    return base64.b64decode(encrypted_data.encode()).decode()
-
-# Màu sắc cho hiển thị
-xnhac = "\033[1;36m"
-do = "\033[1;31m"
-luc = "\033[1;32m"
-vang = "\033[1;33m"
-xduong = "\033[1;34m"
-hong = "\033[1;35m"
-trang = "\033[1;39m"
-end = '\033[0m'
-
-def banner():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print (Colorate.Diagonal(Colors.cyan_to_green, """
-    
-                      © Bản Quyền Thuộc PhuocAn 
-                      
-██████╗ ██╗  ██╗██╗   ██╗ ██████╗  ██████╗                                            
-██████╔╝███████║██║   ██║██║   ██║██║                         
-██╔═══╝ ██╔══██║██║   ██║██║   ██║██║                           
-██║     ██║  ██║╚██████╔╝╚██████╔╝╚██████╗                      
-╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝  ╚═════╝ 
-╠═══════════════════════════════════════════════╣
-║▶ Nhóm   :  https://zalo.me/g/mprgxe166        ║
-║▶ FaceBook : facebook.com/phuocan.9999         ║
-║▶ Youtube : youtube.com/@phuocan.9999          ║
-║▶ Zalo : 0915.948.201                          ║
-╚═══════════════════════════════════════════════╝
-
-"""))
-init(autoreset=True)
-console = Console()
-
-def get_ip_address():
-    try:
-        response = requests.get('https://api.ipify.org?format=json')
-        ip_data = response.json()
-        ip_address = ip_data['ip']
-        return ip_address
-    except Exception as e:
-        print(f"Lỗi khi lấy địa chỉ IP: {e}")
-        return None
-
 def display_ip_address(ip_address):
     if ip_address:
         banner()
@@ -261,60 +197,7 @@ def main():
         box=box.ROUNDED
     ))
             time.sleep(2)
-        else:
-            if da_qua_gio_moi():
-                print("\033[1;32mQuá giờ sử dụng tool !!!")
-                return
 
-            url, key, expiration_date = generate_key_and_url(ip_address)
-
-            with ThreadPoolExecutor(max_workers=2) as executor:
-                print(Colorate.Diagonal(Colors.red_to_green,f"Nhập 1 Để Lấy Key ( Vượt 1 Link 24h ) "))
-
-                while True:
-                    try:
-                        choice = input(Colorate.Diagonal(Colors.red_to_green,f"Nhập lựa chọn: "))
-                        print("\033[97m- - - - - - - - - - - - - - - - - - - - - - -")
-                        if choice == "1":
-                            yeumoney_future = executor.submit(get_shortened_link_phu, url)
-                            yeumoney_data = yeumoney_future.result()
-                            if yeumoney_data and yeumoney_data.get('status') == "error":
-                                print(yeumoney_data.get('message'))
-                                return
-                            else:
-                                link_key_yeumoney = yeumoney_data.get('shortenedUrl')
-                                console.print(Panel.fit(
-        f"[bold yellow]Vượt link để nhận key:[/bold yellow] [bold green]{link_key_yeumoney}[/bold green]",
-        title="[cyan]Check Key ",
-        box=box.ROUNDED
-    ))
-
-                            while True:
-                                keynhap = input('\033[1;36mKey Đã Vượt Là: \033[1;36m')
-                                if keynhap == key :
-                                    console.print(Panel.fit(
-        f"[bold yellow]Key Đúng ✔️ [/bold yellow] [bold green]Loại key : {key}[/bold green] [bold white] Thời gian : {h}:{m}:{s} ",
-        title="[cyan]Check Key ",
-        box=box.ROUNDED
-    ))
-                                    sleep(2)
-                                    luu_thong_tin_ip(ip_address, keynhap, expiration_date)
-                                    return
-                                else:
-                                    console.print(Panel.fit(
-        f"[bold yellow]Vượt link lại :[/bold yellow] [bold green]{link_key_yeumoney}[/bold green]",
-        title="[cyan]Check Key ",
-        box=box.ROUNDED
-    ))
-                    except ValueError:
-                        print("Sẽ out tool vì nghi ngờ bn bug key.")
-                        sys.exit()
-                    except KeyboardInterrupt:
-                        print("\n\033[1;97m[\033[1;91m<>\033[1;97m] \033[1;31mCảm ơn bạn đã dùng Tool !!!")
-                        sys.exit()
-
-if __name__ == '__main__':
-    main()
 
 import json
 import os,time
@@ -429,8 +312,8 @@ t = open("token.txt","r")
 author = Authorization.read()
 token = t.read()
 if author == "":
-  author = input(Colorate.Diagonal(Colors.red_to_green," 💸 NHẬP AUTHORIZATION GOLIKE : \033[1;33m"))
-  token = input(Colorate.Diagonal(Colors.green_to_red,"💸  NHẬP TOKEN (T CỦA GOLIKE): \033[1;33m"))
+  author = input(Colorate.Diagonal(Colors.red_to_green," 💸 NHẬP AUTHORIZATION GOLIKE : "))
+  token = input(Colorate.Diagonal(Colors.green_to_red,"💸  NHẬP TOKEN (T CỦA GOLIKE): "))
   Authorization = open("Authorization.txt","w")
   t = open("token.txt","w")
   Authorization.write(author)
